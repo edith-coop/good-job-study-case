@@ -1,0 +1,343 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =========================
+// ENUMS
+// =========================
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum ReactionEmoji {
+  LIKE
+  LOVE
+  FIRE
+  CLAP
+  PARTY
+}
+
+enum RedemptionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LedgerType {
+  GIVE
+  RECEIVE
+  REDEEM
+  MONTHLY_RESET
+  ADMIN_ADJUST
+}
+
+enum ReferenceType {
+  KUDO
+  REWARD
+}
+
+enum NotificationType {
+  TAGGED
+  COMMENT
+  REACTION
+  KUDO_RECEIVED
+}
+
+// =========================
+// USERS
+// =========================
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  password   String
+  fullName   String
+  avatarUrl  String?
+  department String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  sentKudos             Kudo[]                 @relation("SentKudos")
+  receivedKudos         Kudo[]                 @relation("ReceivedKudos")
+  comments              KudoComment[]
+  reactions             KudoReaction[]
+  ledgers               PointLedger[]
+  notificationsReceived Notification[]         @relation("NotificationReceiver")
+  notificationsSent     Notification[]         @relation("NotificationActor")
+  rewardRedemptions     RewardRedemption[]
+  monthlyBudgets        MonthlyGivingBudget[]
+}
+
+// =========================
+// KUDOS
+// =========================
+
+model Kudo {
+  id         String     @id @default(uuid())
+
+  senderId   String
+  receiverId String
+
+  points     Int
+  coreValue  String
+  message    String
+
+  visibility Visibility @default(PUBLIC)
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  // Relations
+  sender     User        @relation("SentKudos", fields: [senderId], references: [id])
+  receiver   User        @relation("ReceivedKudos", fields: [receiverId], references: [id])
+  media      KudoMedia[]
+  comments   KudoComment[]
+  reactions  KudoReaction[]
+
+  @@index([createdAt(sort: Desc)])
+  @@index([receiverId, createdAt(sort: Desc)])
+  @@index([senderId, createdAt(sort: Desc)])
+
+  // Prisma không support CHECK trực tiếp
+  // Validate ở service layer:
+  // - senderId != receiverId
+  // - points between 10-50
+}
+
+// =========================
+// KUDO MEDIA
+// =========================
+
+model KudoMedia {
+  id              String    @id @default(uuid())
+
+  kudoId          String
+
+  mediaType       MediaType
+  mediaUrl        String
+
+  durationSeconds Int?      @default(0)
+
+  createdAt       DateTime   @default(now())
+
+  // Relations
+  kudo            Kudo      @relation(fields: [kudoId], references: [id], onDelete: Cascade)
+
+  @@index([kudoId])
+}
+
+// =========================
+// KUDO REACTIONS
+// =========================
+
+model KudoReaction {
+  id        String        @id @default(uuid())
+
+  kudoId    String
+  userId    String
+
+  emoji     ReactionEmoji
+
+  createdAt DateTime      @default(now())
+
+  // Relations
+  kudo      Kudo          @relation(fields: [kudoId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([kudoId, userId, emoji])
+  @@index([kudoId])
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+// =========================
+// KUDO COMMENTS
+// =========================
+
+model KudoComment {
+  id        String        @id @default(uuid())
+
+  kudoId    String
+  userId    String
+
+  content   String
+
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // Relations
+  kudo      Kudo          @relation(fields: [kudoId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media     CommentMedia[]
+
+  @@index([kudoId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+// =========================
+// COMMENT MEDIA
+// =========================
+
+model CommentMedia {
+  id        String       @id @default(uuid())
+
+  commentId String
+
+  mediaType MediaType
+  mediaUrl  String
+
+  createdAt DateTime     @default(now())
+
+  // Relations
+  comment   KudoComment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+}
+
+// =========================
+// REWARD CATALOGS
+// =========================
+
+model RewardCatalog {
+  id            String             @id @default(uuid())
+
+  title         String
+  description   String?
+
+  costPoints    Int
+
+  stockQuantity Int                @default(0)
+
+  isActive      Boolean            @default(true)
+
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  // Relations
+  redemptions   RewardRedemption[]
+}
+
+// =========================
+// REWARD REDEMPTIONS
+// =========================
+
+model RewardRedemption {
+  id          String           @id @default(uuid())
+
+  userId      String
+  rewardId    String
+
+  pointsSpent Int
+
+  status      RedemptionStatus @default(PENDING)
+
+  redeemedAt  DateTime         @default(now())
+
+  // Relations
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reward      RewardCatalog    @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+
+  @@index([userId, redeemedAt(sort: Desc)])
+  @@index([rewardId, redeemedAt(sort: Desc)])
+}
+
+// =========================
+// POINT LEDGER
+// =========================
+
+model PointLedger {
+  id            String        @id @default(uuid())
+
+  userId        String
+
+  type          LedgerType
+
+  amount        Int
+
+  referenceType ReferenceType
+  referenceId   String
+
+  description   String?
+
+  createdAt     DateTime      @default(now())
+
+  // Relations
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([referenceType, referenceId])
+}
+
+// =========================
+// NOTIFICATIONS
+// =========================
+
+model Notification {
+  id          String            @id @default(uuid())
+
+  receiverId  String
+  actorId     String?
+
+  type        NotificationType
+
+  entityType  String
+  entityId    String
+
+  isRead      Boolean           @default(false)
+
+  createdAt   DateTime          @default(now())
+
+  // Relations
+  receiver    User              @relation("NotificationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  actor       User?             @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([receiverId, isRead])
+  @@index([entityType, entityId])
+}
+
+// =========================
+// MONTHLY GIVING BUDGETS
+// =========================
+
+model MonthlyGivingBudget {
+  id              String   @id @default(uuid())
+
+  userId          String
+
+  month           String
+  // Example:
+  // 2026-08
+
+  totalBudget     Int      @default(200)
+  usedBudget      Int      @default(0)
+  remainingBudget Int      @default(200)
+
+  resetAt         DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month])
+  @@index([userId])
+}
