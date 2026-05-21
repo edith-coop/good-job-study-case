@@ -15,12 +15,12 @@ export declare class NotificationsController {
             } | null;
         } & {
             id: string;
-            createdAt: Date;
-            receiverId: string;
             type: import("../generated/prisma/enums").NotificationType;
             entityType: string;
             entityId: string;
             isRead: boolean;
+            createdAt: Date;
+            receiverId: string;
             actorId: string | null;
         })[];
         meta: {

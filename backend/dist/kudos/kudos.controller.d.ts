@@ -17,13 +17,6 @@ export declare class KudosController {
     list(query: ListKudosQuery): Promise<{
         items: ({
             comments: ({
-                media: {
-                    id: string;
-                    createdAt: Date;
-                    commentId: string;
-                    mediaType: import("../generated/prisma/enums").MediaType;
-                    mediaUrl: string;
-                }[];
                 user: {
                     id: string;
                     email: string;
@@ -31,6 +24,13 @@ export declare class KudosController {
                     avatarUrl: string | null;
                     department: string | null;
                 };
+                media: {
+                    id: string;
+                    createdAt: Date;
+                    commentId: string;
+                    mediaType: import("../generated/prisma/enums").MediaType;
+                    mediaUrl: string;
+                }[];
             } & {
                 id: string;
                 createdAt: Date;
@@ -39,14 +39,21 @@ export declare class KudosController {
                 userId: string;
                 content: string;
             })[];
-            sender: {
+            receiver: {
                 id: string;
                 email: string;
                 fullName: string;
                 avatarUrl: string | null;
                 department: string | null;
             };
-            receiver: {
+            reactions: {
+                id: string;
+                createdAt: Date;
+                kudoId: string;
+                userId: string;
+                emoji: import("../generated/prisma/enums").ReactionEmoji;
+            }[];
+            sender: {
                 id: string;
                 email: string;
                 fullName: string;
@@ -61,23 +68,16 @@ export declare class KudosController {
                 mediaUrl: string;
                 durationSeconds: number | null;
             }[];
-            reactions: {
-                id: string;
-                createdAt: Date;
-                kudoId: string;
-                userId: string;
-                emoji: import("../generated/prisma/enums").ReactionEmoji;
-            }[];
         } & {
             id: string;
-            senderId: string;
+            createdAt: Date;
             receiverId: string;
+            updatedAt: Date;
+            senderId: string;
             points: number;
             coreValue: string;
             message: string;
             visibility: import("../generated/prisma/enums").Visibility;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
         meta: {
             page: number;
@@ -88,13 +88,6 @@ export declare class KudosController {
     }>;
     getById(id: string): Promise<{
         comments: ({
-            media: {
-                id: string;
-                createdAt: Date;
-                commentId: string;
-                mediaType: import("../generated/prisma/enums").MediaType;
-                mediaUrl: string;
-            }[];
             user: {
                 id: string;
                 email: string;
@@ -102,6 +95,13 @@ export declare class KudosController {
                 avatarUrl: string | null;
                 department: string | null;
             };
+            media: {
+                id: string;
+                createdAt: Date;
+                commentId: string;
+                mediaType: import("../generated/prisma/enums").MediaType;
+                mediaUrl: string;
+            }[];
         } & {
             id: string;
             createdAt: Date;
@@ -110,14 +110,21 @@ export declare class KudosController {
             userId: string;
             content: string;
         })[];
-        sender: {
+        receiver: {
             id: string;
             email: string;
             fullName: string;
             avatarUrl: string | null;
             department: string | null;
         };
-        receiver: {
+        reactions: {
+            id: string;
+            createdAt: Date;
+            kudoId: string;
+            userId: string;
+            emoji: import("../generated/prisma/enums").ReactionEmoji;
+        }[];
+        sender: {
             id: string;
             email: string;
             fullName: string;
@@ -132,36 +139,22 @@ export declare class KudosController {
             mediaUrl: string;
             durationSeconds: number | null;
         }[];
-        reactions: {
-            id: string;
-            createdAt: Date;
-            kudoId: string;
-            userId: string;
-            emoji: import("../generated/prisma/enums").ReactionEmoji;
-        }[];
     } & {
         id: string;
-        senderId: string;
+        createdAt: Date;
         receiverId: string;
+        updatedAt: Date;
+        senderId: string;
         points: number;
         coreValue: string;
         message: string;
         visibility: import("../generated/prisma/enums").Visibility;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     addComment(req: {
         user: {
             sub: string;
         };
     }, id: string, dto: CreateCommentDto): Promise<{
-        media: {
-            id: string;
-            createdAt: Date;
-            commentId: string;
-            mediaType: import("../generated/prisma/enums").MediaType;
-            mediaUrl: string;
-        }[];
         user: {
             id: string;
             email: string;
@@ -169,6 +162,13 @@ export declare class KudosController {
             avatarUrl: string | null;
             department: string | null;
         };
+        media: {
+            id: string;
+            createdAt: Date;
+            commentId: string;
+            mediaType: import("../generated/prisma/enums").MediaType;
+            mediaUrl: string;
+        }[];
     } & {
         id: string;
         createdAt: Date;
