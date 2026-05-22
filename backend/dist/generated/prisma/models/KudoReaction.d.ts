@@ -111,7 +111,7 @@ export type KudoReactionOrderByWithRelationInput = {
 };
 export type KudoReactionWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
-    kudoId_userId_emoji?: Prisma.KudoReactionKudoIdUserIdEmojiCompoundUniqueInput;
+    kudoId_userId?: Prisma.KudoReactionKudoIdUserIdCompoundUniqueInput;
     AND?: Prisma.KudoReactionWhereInput | Prisma.KudoReactionWhereInput[];
     OR?: Prisma.KudoReactionWhereInput[];
     NOT?: Prisma.KudoReactionWhereInput | Prisma.KudoReactionWhereInput[];
@@ -121,7 +121,7 @@ export type KudoReactionWhereUniqueInput = Prisma.AtLeast<{
     createdAt?: Prisma.DateTimeFilter<"KudoReaction"> | Date | string;
     kudo?: Prisma.XOR<Prisma.KudoScalarRelationFilter, Prisma.KudoWhereInput>;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
-}, "id" | "kudoId_userId_emoji">;
+}, "id" | "kudoId_userId">;
 export type KudoReactionOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     kudoId?: Prisma.SortOrder;
@@ -197,10 +197,9 @@ export type KudoReactionListRelationFilter = {
 export type KudoReactionOrderByRelationAggregateInput = {
     _count?: Prisma.SortOrder;
 };
-export type KudoReactionKudoIdUserIdEmojiCompoundUniqueInput = {
+export type KudoReactionKudoIdUserIdCompoundUniqueInput = {
     kudoId: string;
     userId: string;
-    emoji: $Enums.ReactionEmoji;
 };
 export type KudoReactionCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;

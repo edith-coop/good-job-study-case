@@ -60,4 +60,10 @@ export class CreateKudoDto {
   @ValidateNested({ each: true })
   @Type(() => KudoMediaDto)
   media?: KudoMediaDto[];
+
+  @ApiPropertyOptional({ type: [String], example: ['user-id-1', 'user-id-2'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  taggedUserIds?: string[];
 }

@@ -36,6 +36,9 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get kudo(): Prisma.KudoDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get kudoTag(): Prisma.KudoTagDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
     get kudoMedia(): Prisma.KudoMediaDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;

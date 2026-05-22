@@ -7,26 +7,26 @@ export declare class AuthController {
     register(dto: RegisterDto): Promise<{
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             password: string;
             fullName: string;
             avatarUrl: string | null;
             department: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         };
     }>;
     login(dto: LoginDto): Promise<{
         accessToken: string;
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             password: string;
             fullName: string;
             avatarUrl: string | null;
             department: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         };
     }>;
 }

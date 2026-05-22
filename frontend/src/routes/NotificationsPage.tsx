@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getNotifications, getUnreadNotificationCount, markAllNotificationsAsRead } from '../api'
 import { FeedLoading } from '../components/FeedLoading'
+import { connectSocket, disconnectSocket } from '../lib/socket'
 
 const notificationMeta: Record<string, { label: string; badgeClass: string; icon: string }> = {
   KUDO_CREATED: { label: 'Kudo', badgeClass: 'bg-blue-50 text-blue-700', icon: '👏' },
@@ -46,6 +48,36 @@ export function NotificationsPage() {
     },
   })
 
+  useEffect(() => {
+    const cachedUser = localStorage.getItem('authUser')
+    const userId = cachedUser ? (JSON.parse(cachedUser) as { id?: string }).id : undefined
+    if (!userId) return
+
+    const socket = connectSocket(userId)
+
+    const invalidate = async () => {
+      await queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      await queryClient.invalidateQueries({ queryKey: ['notifications', 'unread-count'] })
+    }
+
+    const handleNotification = async () => {
+      await invalidate()
+    }
+
+    const handleNotificationRead = async () => {
+      await invalidate()
+    }
+
+    socket.on('notification', handleNotification)
+    socket.on('notification.read', handleNotificationRead)
+
+    return () => {
+      socket.off('notification', handleNotification)
+      socket.off('notification.read', handleNotificationRead)
+      disconnectSocket()
+    }
+  }, [queryClient])
+
   const items = notifications?.items ?? []
   const unreadCount = unreadCountData?.unreadCount ?? notifications?.meta.unreadCount ?? 0
 
@@ -72,13 +104,10 @@ export function NotificationsPage() {
         </div>
       </header>
 
-      
       {isLoading ? (
         <FeedLoading />
       ) : isError ? (
-        <article className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700">
-          Failed to load notifications
-        </article>
+        <article className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700">Failed to load notifications</article>
       ) : (
         <section className="grid gap-4">
           {items.length === 0 ? (
@@ -110,9 +139,7 @@ export function NotificationsPage() {
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <strong className="text-slate-900">{item.actor?.fullName ?? 'Amanotes system'}</strong>
-                          <span className={`rounded-full px-3 py-1 text-xs font-bold ${meta.badgeClass}`}>
-                            {meta.label}
-                          </span>
+                          <span className={`rounded-full px-3 py-1 text-xs font-bold ${meta.badgeClass}`}>{meta.label}</span>
                           {!item.isRead ? (
                             <span className="rounded-full bg-blue-600 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
                               New

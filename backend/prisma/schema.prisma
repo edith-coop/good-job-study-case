@@ -21,6 +21,11 @@ enum Visibility {
   PRIVATE
 }
 
+enum KudoType {
+  LIVE_FEED
+  PEER_RECOGNITION
+}
+
 enum MediaType {
   IMAGE
   VIDEO
@@ -85,6 +90,7 @@ model User {
   notificationsSent     Notification[]         @relation("NotificationActor")
   rewardRedemptions     RewardRedemption[]
   monthlyBudgets        MonthlyGivingBudget[]
+  taggedKudos           KudoTag[]
 }
 
 // =========================
@@ -97,11 +103,13 @@ model Kudo {
   senderId   String
   receiverId String
 
+  type       KudoType   @default(PEER_RECOGNITION)
+
   points     Int
   coreValue  String
   message    String
 
-  visibility Visibility @default(PUBLIC)
+  visibility Visibility @default(PRIVATE)
 
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -112,7 +120,9 @@ model Kudo {
   media      KudoMedia[]
   comments   KudoComment[]
   reactions  KudoReaction[]
+  tags       KudoTag[]
 
+  @@index([type, createdAt(sort: Desc)])
   @@index([createdAt(sort: Desc)])
   @@index([receiverId, createdAt(sort: Desc)])
   @@index([senderId, createdAt(sort: Desc)])
@@ -121,6 +131,27 @@ model Kudo {
   // Validate ở service layer:
   // - senderId != receiverId
   // - points between 10-50
+}
+
+// =========================
+// KUDO TAGS
+// =========================
+
+model KudoTag {
+  id        String   @id @default(uuid())
+
+  kudoId    String
+  userId    String
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  kudo      Kudo     @relation(fields: [kudoId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([kudoId, userId])
+  @@index([kudoId])
+  @@index([userId])
 }
 
 // =========================
@@ -163,7 +194,7 @@ model KudoReaction {
   kudo      Kudo          @relation(fields: [kudoId], references: [id], onDelete: Cascade)
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([kudoId, userId, emoji])
+  @@unique([kudoId, userId])
   @@index([kudoId])
   @@index([userId, createdAt(sort: Desc)])
 }

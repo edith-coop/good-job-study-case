@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationType = exports.ReferenceType = exports.LedgerType = exports.RedemptionStatus = exports.ReactionEmoji = exports.MediaType = exports.Visibility = void 0;
+exports.NotificationType = exports.ReferenceType = exports.LedgerType = exports.RedemptionStatus = exports.ReactionEmoji = exports.MediaType = exports.KudoType = exports.Visibility = void 0;
 exports.Visibility = {
     PUBLIC: 'PUBLIC',
     PRIVATE: 'PRIVATE'
+};
+exports.KudoType = {
+    LIVE_FEED: 'LIVE_FEED',
+    PEER_RECOGNITION: 'PEER_RECOGNITION'
 };
 exports.MediaType = {
     IMAGE: 'IMAGE',

@@ -159,6 +159,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export declare const ModelName: {
     readonly User: "User";
     readonly Kudo: "Kudo";
+    readonly KudoTag: "KudoTag";
     readonly KudoMedia: "KudoMedia";
     readonly KudoReaction: "KudoReaction";
     readonly KudoComment: "KudoComment";
@@ -180,7 +181,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "user" | "kudo" | "kudoMedia" | "kudoReaction" | "kudoComment" | "commentMedia" | "rewardCatalog" | "rewardRedemption" | "pointLedger" | "notification" | "monthlyGivingBudget";
+        modelProps: "user" | "kudo" | "kudoTag" | "kudoMedia" | "kudoReaction" | "kudoComment" | "commentMedia" | "rewardCatalog" | "rewardRedemption" | "pointLedger" | "notification" | "monthlyGivingBudget";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -329,6 +330,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.KudoCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.KudoCountAggregateOutputType> | number;
+                };
+            };
+        };
+        KudoTag: {
+            payload: Prisma.$KudoTagPayload<ExtArgs>;
+            fields: Prisma.KudoTagFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.KudoTagFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.KudoTagFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                findFirst: {
+                    args: Prisma.KudoTagFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.KudoTagFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                findMany: {
+                    args: Prisma.KudoTagFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>[];
+                };
+                create: {
+                    args: Prisma.KudoTagCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                createMany: {
+                    args: Prisma.KudoTagCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.KudoTagCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>[];
+                };
+                delete: {
+                    args: Prisma.KudoTagDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                update: {
+                    args: Prisma.KudoTagUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.KudoTagDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.KudoTagUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.KudoTagUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>[];
+                };
+                upsert: {
+                    args: Prisma.KudoTagUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$KudoTagPayload>;
+                };
+                aggregate: {
+                    args: Prisma.KudoTagAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateKudoTag>;
+                };
+                groupBy: {
+                    args: Prisma.KudoTagGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.KudoTagGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.KudoTagCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.KudoTagCountAggregateOutputType> | number;
                 };
             };
         };
@@ -1044,6 +1119,7 @@ export declare const KudoScalarFieldEnum: {
     readonly id: "id";
     readonly senderId: "senderId";
     readonly receiverId: "receiverId";
+    readonly type: "type";
     readonly points: "points";
     readonly coreValue: "coreValue";
     readonly message: "message";
@@ -1052,6 +1128,13 @@ export declare const KudoScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type KudoScalarFieldEnum = (typeof KudoScalarFieldEnum)[keyof typeof KudoScalarFieldEnum];
+export declare const KudoTagScalarFieldEnum: {
+    readonly id: "id";
+    readonly kudoId: "kudoId";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+};
+export type KudoTagScalarFieldEnum = (typeof KudoTagScalarFieldEnum)[keyof typeof KudoTagScalarFieldEnum];
 export declare const KudoMediaScalarFieldEnum: {
     readonly id: "id";
     readonly kudoId: "kudoId";
@@ -1159,6 +1242,8 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>;
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>;
+export type EnumKudoTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KudoType'>;
+export type ListEnumKudoTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KudoType[]'>;
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>;
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
 export type EnumVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Visibility'>;
@@ -1205,6 +1290,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
     user?: Prisma.UserOmit;
     kudo?: Prisma.KudoOmit;
+    kudoTag?: Prisma.KudoTagOmit;
     kudoMedia?: Prisma.KudoMediaOmit;
     kudoReaction?: Prisma.KudoReactionOmit;
     kudoComment?: Prisma.KudoCommentOmit;

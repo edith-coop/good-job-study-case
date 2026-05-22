@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
-import { getMe, getRedemptions, getRewards, redeemReward, type RewardCatalogItem } from '../api'
+import { getMe, getRedemptions, getRewards, redeemReward } from '../api'
 
 function statusClass(status: string) {
   switch (status) {

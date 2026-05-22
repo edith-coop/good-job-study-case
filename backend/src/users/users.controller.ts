@@ -10,6 +10,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiBearerAuth()
+  @ApiOkResponse({ description: 'List all users' })
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  listAllUsers() {
+    return this.usersService.listUsers();
+  }
+
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Current user profile' })
   @UseGuards(JwtAuthGuard)
   @Get('me')

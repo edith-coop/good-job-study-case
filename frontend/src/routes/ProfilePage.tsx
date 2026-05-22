@@ -1,8 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState, type FormEvent } from 'react'
 import { getMe, updateMe, uploadFile, type MeResponse } from '../api'
-import { companyDepartments } from '../constants/companyDepartments'
-import { SkeletonBlock } from '../components/SkeletonBlock'
+function SkeletonBlock({ className }: { className: string }) {
+  return <div className={`animate-pulse rounded-2xl bg-slate-200 ${className}`} />
+}
+
+const companyDepartments = [
+  'Engineering',
+  'Product',
+  'Design',
+  'Marketing',
+  'Sales',
+  'Customer Success',
+  'People Ops',
+  'Finance',
+]
 
 type ProfileFormState = {
   fullName: string
@@ -30,7 +42,7 @@ export function ProfilePage() {
       let avatarUrl = values.avatarPreview
       if (values.avatarFile) {
         const uploaded = await uploadFile(values.avatarFile)
-        avatarUrl = uploaded.url
+        avatarUrl = uploaded
       }
 
       return updateMe({

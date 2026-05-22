@@ -73,4 +73,11 @@ __decorate([
     (0, class_transformer_1.Type)(() => KudoMediaDto),
     __metadata("design:type", Array)
 ], CreateKudoDto.prototype, "media", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String], example: ['user-id-1', 'user-id-2'] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateKudoDto.prototype, "taggedUserIds", void 0);
 //# sourceMappingURL=create-kudo.dto.js.map

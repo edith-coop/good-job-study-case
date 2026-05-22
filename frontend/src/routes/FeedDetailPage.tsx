@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { addKudoComment, addKudoReaction, getKudoById, uploadFile } from '../api'
+import { addKudoFeedComment, addKudoFeedReaction, getKudoById, uploadFile } from '../api'
 import { FeedLoading } from '../components/FeedLoading'
 
 type ReactionType = 'LIKE' | 'LOVE' | 'FIRE' | 'CLAP' | 'PARTY'
@@ -44,7 +44,7 @@ export function FeedDetailPage() {
   })
 
   const reactionMutation = useMutation({
-    mutationFn: (emoji: ReactionType) => addKudoReaction(id ?? '', { emoji }),
+    mutationFn: (emoji: ReactionType) => addKudoFeedReaction(id ?? '', { emoji }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['kudo', id] })
       await queryClient.invalidateQueries({ queryKey: ['kudos'] })
@@ -62,7 +62,7 @@ export function FeedDetailPage() {
           ]
         : undefined
 
-      return addKudoComment(id ?? '', {
+      return addKudoFeedComment(id ?? '', {
         content: payload.content,
         ...(media ? { media } : {}),
       })
@@ -111,8 +111,6 @@ export function FeedDetailPage() {
     setCommentMode(file.type.startsWith('video/') ? 'video' : 'image')
   }
 
-  const canSendComment =
-    comment.trim().length > 0 || Boolean(commentFile)
 
   return (
     <div className="grid gap-5">

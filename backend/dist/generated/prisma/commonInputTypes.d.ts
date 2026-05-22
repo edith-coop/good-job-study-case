@@ -89,6 +89,12 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     _min?: Prisma.NestedDateTimeFilter<$PrismaModel>;
     _max?: Prisma.NestedDateTimeFilter<$PrismaModel>;
 };
+export type EnumKudoTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.KudoType | Prisma.EnumKudoTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel> | $Enums.KudoType;
+};
 export type IntFilter<$PrismaModel = never> = {
     equals?: number | Prisma.IntFieldRefInput<$PrismaModel>;
     in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>;
@@ -104,6 +110,15 @@ export type EnumVisibilityFilter<$PrismaModel = never> = {
     in?: $Enums.Visibility[] | Prisma.ListEnumVisibilityFieldRefInput<$PrismaModel>;
     notIn?: $Enums.Visibility[] | Prisma.ListEnumVisibilityFieldRefInput<$PrismaModel>;
     not?: Prisma.NestedEnumVisibilityFilter<$PrismaModel> | $Enums.Visibility;
+};
+export type EnumKudoTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.KudoType | Prisma.EnumKudoTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumKudoTypeWithAggregatesFilter<$PrismaModel> | $Enums.KudoType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel>;
 };
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | Prisma.IntFieldRefInput<$PrismaModel>;
@@ -379,11 +394,26 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     _min?: Prisma.NestedDateTimeFilter<$PrismaModel>;
     _max?: Prisma.NestedDateTimeFilter<$PrismaModel>;
 };
+export type NestedEnumKudoTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.KudoType | Prisma.EnumKudoTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel> | $Enums.KudoType;
+};
 export type NestedEnumVisibilityFilter<$PrismaModel = never> = {
     equals?: $Enums.Visibility | Prisma.EnumVisibilityFieldRefInput<$PrismaModel>;
     in?: $Enums.Visibility[] | Prisma.ListEnumVisibilityFieldRefInput<$PrismaModel>;
     notIn?: $Enums.Visibility[] | Prisma.ListEnumVisibilityFieldRefInput<$PrismaModel>;
     not?: Prisma.NestedEnumVisibilityFilter<$PrismaModel> | $Enums.Visibility;
+};
+export type NestedEnumKudoTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.KudoType | Prisma.EnumKudoTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.KudoType[] | Prisma.ListEnumKudoTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumKudoTypeWithAggregatesFilter<$PrismaModel> | $Enums.KudoType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumKudoTypeFilter<$PrismaModel>;
 };
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | Prisma.IntFieldRefInput<$PrismaModel>;

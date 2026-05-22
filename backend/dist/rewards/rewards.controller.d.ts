@@ -7,33 +7,33 @@ export declare class RewardsController {
     constructor(rewardsService: RewardsService);
     create(dto: CreateRewardDto): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         description: string | null;
         costPoints: number;
         stockQuantity: number;
         isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): import("../generated/prisma/internal/prismaNamespace").PrismaPromise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         description: string | null;
         costPoints: number;
         stockQuantity: number;
         isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findById(id: string): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         description: string | null;
         costPoints: number;
         stockQuantity: number;
         isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     redeem(userId: string, dto: RedeemRewardDto): Promise<{
         redemption: {
@@ -46,13 +46,13 @@ export declare class RewardsController {
         };
         reward: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             title: string;
             description: string | null;
             costPoints: number;
             stockQuantity: number;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     listRedemptions(): import("../generated/prisma/internal/prismaNamespace").PrismaPromise<({
@@ -65,13 +65,13 @@ export declare class RewardsController {
         };
         reward: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             title: string;
             description: string | null;
             costPoints: number;
             stockQuantity: number;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
@@ -91,13 +91,13 @@ export declare class RewardsController {
         };
         reward: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             title: string;
             description: string | null;
             costPoints: number;
             stockQuantity: number;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;

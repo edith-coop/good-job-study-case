@@ -133,7 +133,8 @@ export type KudoListItem = {
   receiver?: AuthUser
   media?: KudoMedia[]
   comments?: KudoComment[]
-  reactions?: KudoReaction[]
+  reactions?: KudoReaction[],
+  tags?:any
 }
 
 export type KudoDetailResponse = KudoListItem
@@ -146,6 +147,20 @@ export type KudoListResponse = {
     total: number
     totalPages: number
   }
+}
+
+export type CreateKudoPayload = {
+  receiverId: string
+  points: number
+  coreValue: string
+  message: string
+  visibility?: 'PUBLIC' | 'PRIVATE'
+  media?: Array<{
+    mediaType: 'IMAGE' | 'VIDEO'
+    mediaUrl: string
+    durationSeconds?: number
+  }>
+  taggedUserIds?: string[]
 }
 
 export type KudoCommentMediaPayload = {
@@ -223,6 +238,9 @@ export type RedeemRewardPayload = {
   rewardId: string
 }
 
+export type PeerRecognitionResponse = KudoListResponse
+export type UserSearchItem = AuthUser
+
 export async function register(payload: RegisterPayload) {
   return request<{ user: AuthUser }>('/auth/register', {
     method: 'POST',
@@ -239,6 +257,10 @@ export async function login(payload: LoginPayload) {
 
 export async function getMe() {
   return request<MeResponse>('/users/me')
+}
+
+export async function getUsers() {
+  return request<UserSearchItem[]>('/users')
 }
 
 export async function updateMe(payload: UpdateUserPayload) {
@@ -258,26 +280,46 @@ export async function uploadFile(file: File) {
   })
 }
 
-export async function getKudos() {
-  return request<KudoListResponse>('/kudos')
+export async function createKudo(payload: CreateKudoPayload) {
+  return request<KudoListItem>('/kudos/feed', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+export async function createKudoPeerRecognition(payload: CreateKudoPayload) {
+  return request<KudoListItem>('/kudos', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+export async function getKudosFeed() {
+  return request<KudoListResponse>('/kudos/feed')
 }
 
 export async function getKudoById(id: string) {
-  return request<KudoDetailResponse>(`/kudos/${id}`)
+  return request<KudoDetailResponse>(`/kudos/feed/${id}`)
 }
 
-export async function addKudoComment(id: string, payload: KudoCommentPayload) {
-  return request<KudoComment>(`/kudos/${id}/comments`, {
+export async function addKudoFeedComment(id: string, payload: KudoCommentPayload) {
+  return request<KudoComment>(`/kudos/feed/${id}/comments`, {
     method: 'POST',
     body: JSON.stringify(payload),
   })
 }
 
-export async function addKudoReaction(id: string, payload: KudoReactionPayload) {
-  return request<KudoReaction>(`/kudos/${id}/reactions`, {
+export async function addKudoFeedReaction(id: string, payload: KudoReactionPayload) {
+  return request<KudoReaction>(`/kudos/feed/${id}/reactions`, {
     method: 'POST',
     body: JSON.stringify(payload),
   })
+}
+
+export async function getPeerRecognitionSent() {
+  return request<PeerRecognitionResponse>('/kudos/peer-recognition/sent')
+}
+
+export async function getPeerRecognitionReceived() {
+  return request<PeerRecognitionResponse>('/kudos/peer-recognition/received')
 }
 
 export async function getNotifications() {

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { NavLink } from 'react-router-dom'
-import { getMe, type AuthUser, type MeResponse } from '../api'
+import { getMe, getUnreadNotificationCount, type AuthUser, type MeResponse } from '../api'
 
 function SkeletonBlock({ className }: { className: string }) {
   return <div className={`animate-pulse rounded-2xl bg-slate-200 ${className}`} />
@@ -12,11 +12,18 @@ export function SharedSidebar({ user, onLogout }: { user: AuthUser; onLogout: ()
     queryFn: getMe,
   })
 
+  const { data: unreadCountData } = useQuery({
+    queryKey: ['notifications', 'unread-count'],
+    queryFn: getUnreadNotificationCount,
+    refetchInterval: 15_000,
+  })
+
   const remainingBudget = me?.currentGivingBudget?.remainingBudget ?? 200
   const pointBalance = me?.pointBalance ?? 0
+  const unreadCount = unreadCountData?.unreadCount ?? 0
 
   return (
-    <aside className="sticky top-5 h-[calc(100vh-2.5rem)] overflow-auto rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <aside className="sticky top-5 flex h-[calc(100vh-2.5rem)] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <div>
         <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-blue-700">
           Amanotes Recognition
@@ -43,7 +50,7 @@ export function SharedSidebar({ user, onLogout }: { user: AuthUser; onLogout: ()
         <NavLink
           to="/notifications"
           className={({ isActive }) =>
-            `rounded-2xl border px-4 py-3 text-left font-semibold transition hover:-translate-y-0.5 ${
+            `relative rounded-2xl border px-4 py-3 text-left font-semibold transition hover:-translate-y-0.5 ${
               isActive
                 ? 'border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 text-blue-700'
                 : 'border-slate-200 bg-slate-50 text-slate-700'
@@ -51,9 +58,14 @@ export function SharedSidebar({ user, onLogout }: { user: AuthUser; onLogout: ()
           }
         >
           Notifications
+          {unreadCount > 0 ? (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-rose-500 px-2 py-0.5 text-[11px] font-bold text-white">
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          ) : null}
         </NavLink>
         <NavLink
-          to="/profile"
+          to="/peer-recognition"
           className={({ isActive }) =>
             `rounded-2xl border px-4 py-3 text-left font-semibold transition hover:-translate-y-0.5 ${
               isActive
@@ -62,7 +74,7 @@ export function SharedSidebar({ user, onLogout }: { user: AuthUser; onLogout: ()
             }`
           }
         >
-          Profile
+          Peer Recognition
         </NavLink>
         <NavLink
           to="/rewards"
@@ -75,6 +87,18 @@ export function SharedSidebar({ user, onLogout }: { user: AuthUser; onLogout: ()
           }
         >
           Rewards
+        </NavLink>
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `rounded-2xl border px-4 py-3 text-left font-semibold transition hover:-translate-y-0.5 ${
+              isActive
+                ? 'border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 text-blue-700'
+                : 'border-slate-200 bg-slate-50 text-slate-700'
+            }`
+          }
+        >
+          Profile
         </NavLink>
       </nav>
 

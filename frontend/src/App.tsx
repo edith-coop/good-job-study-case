@@ -6,6 +6,7 @@ import { SharedSidebar } from './components/SharedSidebar'
 import { FeedDetailPage } from './routes/FeedDetailPage'
 import { FeedPage } from './routes/FeedPage'
 import { NotificationsPage } from './routes/NotificationsPage'
+import { PeerRecognitionPage } from './routes/PeerRecognitionPage'
 import { RewardRedemptionPage } from './routes/RewardRedemptionPage'
 import { ProfilePage } from './routes/ProfilePage'
 
@@ -241,6 +242,7 @@ function AppRoutes() {
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/:id" element={<FeedDetailPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/peer-recognition" element={<PeerRecognitionPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/rewards" element={<RewardRedemptionPage />} />
       </Route>

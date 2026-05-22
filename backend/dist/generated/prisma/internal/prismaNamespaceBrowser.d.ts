@@ -13,6 +13,7 @@ export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClas
 export declare const ModelName: {
     readonly User: "User";
     readonly Kudo: "Kudo";
+    readonly KudoTag: "KudoTag";
     readonly KudoMedia: "KudoMedia";
     readonly KudoReaction: "KudoReaction";
     readonly KudoComment: "KudoComment";
@@ -46,6 +47,7 @@ export declare const KudoScalarFieldEnum: {
     readonly id: "id";
     readonly senderId: "senderId";
     readonly receiverId: "receiverId";
+    readonly type: "type";
     readonly points: "points";
     readonly coreValue: "coreValue";
     readonly message: "message";
@@ -54,6 +56,13 @@ export declare const KudoScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type KudoScalarFieldEnum = (typeof KudoScalarFieldEnum)[keyof typeof KudoScalarFieldEnum];
+export declare const KudoTagScalarFieldEnum: {
+    readonly id: "id";
+    readonly kudoId: "kudoId";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+};
+export type KudoTagScalarFieldEnum = (typeof KudoTagScalarFieldEnum)[keyof typeof KudoTagScalarFieldEnum];
 export declare const KudoMediaScalarFieldEnum: {
     readonly id: "id";
     readonly kudoId: "kudoId";

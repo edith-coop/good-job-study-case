@@ -1,5 +1,6 @@
 export type * from './models/User';
 export type * from './models/Kudo';
+export type * from './models/KudoTag';
 export type * from './models/KudoMedia';
 export type * from './models/KudoReaction';
 export type * from './models/KudoComment';

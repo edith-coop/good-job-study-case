@@ -12,6 +12,15 @@ export declare class UsersService {
         createdAt: Date;
         updatedAt: Date;
     } | null>;
+    listUsers(): Promise<{
+        id: string;
+        email: string;
+        fullName: string;
+        avatarUrl: string | null;
+        department: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     private getCurrentMonth;
     getCurrentGivingBudget(userId: string): Promise<{
         id: string;

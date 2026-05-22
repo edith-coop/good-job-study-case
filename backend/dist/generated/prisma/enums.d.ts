@@ -3,6 +3,11 @@ export declare const Visibility: {
     readonly PRIVATE: "PRIVATE";
 };
 export type Visibility = (typeof Visibility)[keyof typeof Visibility];
+export declare const KudoType: {
+    readonly LIVE_FEED: "LIVE_FEED";
+    readonly PEER_RECOGNITION: "PEER_RECOGNITION";
+};
+export type KudoType = (typeof KudoType)[keyof typeof KudoType];
 export declare const MediaType: {
     readonly IMAGE: "IMAGE";
     readonly VIDEO: "VIDEO";

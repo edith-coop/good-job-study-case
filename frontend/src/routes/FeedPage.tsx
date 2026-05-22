@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getKudos, getMe, type MeResponse } from '../api'
+import { getKudosFeed, getMe, type MeResponse } from '../api'
 import { FeedComposer } from '../components/FeedComposer'
 import { FeedLoading } from '../components/FeedLoading'
 import { FeedCard } from '../components/FeedCard'
@@ -11,7 +11,7 @@ export function FeedPage() {
     isError: kudosError,
   } = useQuery({
     queryKey: ['kudos'],
-    queryFn: getKudos,
+    queryFn: getKudosFeed,
   })
 
   const feedItems = kudos?.items ?? []
@@ -44,7 +44,7 @@ export function FeedPage() {
         </div>
       </header>
 
-      <section className="grid gap-4 lg:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-2">
         {[
           {
             label: 'Current user',
@@ -56,12 +56,7 @@ export function FeedPage() {
             label: 'Giving budget',
             title: `${remainingBudget} pts left`,
             description: `${usedBudget} pts used this month`,
-          },
-          {
-            label: 'Realtime status',
-            title: 'Connected',
-            description: 'Socket room ready for notifications',
-          },
+          }
         ].map((card) => (
           <article
             key={card.label}

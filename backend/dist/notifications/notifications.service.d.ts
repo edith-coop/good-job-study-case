@@ -21,13 +21,13 @@ export declare class NotificationsService {
         } | null;
     } & {
         id: string;
+        createdAt: Date;
         type: import("../generated/prisma/enums").NotificationType;
+        receiverId: string;
+        actorId: string | null;
         entityType: string;
         entityId: string;
         isRead: boolean;
-        createdAt: Date;
-        receiverId: string;
-        actorId: string | null;
     }>;
     list(userId: string, query: ListNotificationsQuery): Promise<{
         items: ({
@@ -40,13 +40,13 @@ export declare class NotificationsService {
             } | null;
         } & {
             id: string;
+            createdAt: Date;
             type: import("../generated/prisma/enums").NotificationType;
+            receiverId: string;
+            actorId: string | null;
             entityType: string;
             entityId: string;
             isRead: boolean;
-            createdAt: Date;
-            receiverId: string;
-            actorId: string | null;
         })[];
         meta: {
             page: number;

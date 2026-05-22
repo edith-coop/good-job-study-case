@@ -11,5 +11,6 @@ export declare class CreateKudoDto {
     message: string;
     visibility?: Visibility;
     media?: KudoMediaDto[];
+    taggedUserIds?: string[];
 }
 export {};

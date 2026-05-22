@@ -21,6 +21,23 @@ export class UsersService {
     });
   }
 
+  async listUsers() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        avatarUrl: true,
+        department: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   private getCurrentMonth() {
     return new Date().toISOString().slice(0, 7);
   }

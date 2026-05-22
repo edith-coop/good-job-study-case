@@ -129,6 +129,7 @@ export type UserWhereInput = {
     notificationsSent?: Prisma.NotificationListRelationFilter;
     rewardRedemptions?: Prisma.RewardRedemptionListRelationFilter;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetListRelationFilter;
+    taggedKudos?: Prisma.KudoTagListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -148,6 +149,7 @@ export type UserOrderByWithRelationInput = {
     notificationsSent?: Prisma.NotificationOrderByRelationAggregateInput;
     rewardRedemptions?: Prisma.RewardRedemptionOrderByRelationAggregateInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetOrderByRelationAggregateInput;
+    taggedKudos?: Prisma.KudoTagOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -170,6 +172,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     notificationsSent?: Prisma.NotificationListRelationFilter;
     rewardRedemptions?: Prisma.RewardRedemptionListRelationFilter;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetListRelationFilter;
+    taggedKudos?: Prisma.KudoTagListRelationFilter;
 }, "id" | "email">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -215,6 +218,7 @@ export type UserCreateInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -234,6 +238,7 @@ export type UserUncheckedCreateInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -253,6 +258,7 @@ export type UserUpdateInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -272,6 +278,7 @@ export type UserUncheckedUpdateInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -373,6 +380,18 @@ export type UserUpdateOneRequiredWithoutReceivedKudosNestedInput = {
     upsert?: Prisma.UserUpsertWithoutReceivedKudosInput;
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReceivedKudosInput, Prisma.UserUpdateWithoutReceivedKudosInput>, Prisma.UserUncheckedUpdateWithoutReceivedKudosInput>;
+};
+export type UserCreateNestedOneWithoutTaggedKudosInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedKudosInput, Prisma.UserUncheckedCreateWithoutTaggedKudosInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedKudosInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutTaggedKudosNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedKudosInput, Prisma.UserUncheckedCreateWithoutTaggedKudosInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedKudosInput;
+    upsert?: Prisma.UserUpsertWithoutTaggedKudosInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTaggedKudosInput, Prisma.UserUpdateWithoutTaggedKudosInput>, Prisma.UserUncheckedUpdateWithoutTaggedKudosInput>;
 };
 export type UserCreateNestedOneWithoutReactionsInput = {
     create?: Prisma.XOR<Prisma.UserCreateWithoutReactionsInput, Prisma.UserUncheckedCreateWithoutReactionsInput>;
@@ -477,6 +496,7 @@ export type UserCreateWithoutSentKudosInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSentKudosInput = {
     id?: string;
@@ -495,6 +515,7 @@ export type UserUncheckedCreateWithoutSentKudosInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSentKudosInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -517,6 +538,7 @@ export type UserCreateWithoutReceivedKudosInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutReceivedKudosInput = {
     id?: string;
@@ -535,6 +557,7 @@ export type UserUncheckedCreateWithoutReceivedKudosInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutReceivedKudosInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -566,6 +589,7 @@ export type UserUpdateWithoutSentKudosInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSentKudosInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -584,6 +608,7 @@ export type UserUncheckedUpdateWithoutSentKudosInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserUpsertWithoutReceivedKudosInput = {
     update: Prisma.XOR<Prisma.UserUpdateWithoutReceivedKudosInput, Prisma.UserUncheckedUpdateWithoutReceivedKudosInput>;
@@ -611,6 +636,7 @@ export type UserUpdateWithoutReceivedKudosInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutReceivedKudosInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -622,6 +648,96 @@ export type UserUncheckedUpdateWithoutReceivedKudosInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sentKudos?: Prisma.KudoUncheckedUpdateManyWithoutSenderNestedInput;
+    comments?: Prisma.KudoCommentUncheckedUpdateManyWithoutUserNestedInput;
+    reactions?: Prisma.KudoReactionUncheckedUpdateManyWithoutUserNestedInput;
+    ledgers?: Prisma.PointLedgerUncheckedUpdateManyWithoutUserNestedInput;
+    notificationsReceived?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput;
+    notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
+    rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
+    monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutTaggedKudosInput = {
+    id?: string;
+    email: string;
+    password: string;
+    fullName: string;
+    avatarUrl?: string | null;
+    department?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    sentKudos?: Prisma.KudoCreateNestedManyWithoutSenderInput;
+    receivedKudos?: Prisma.KudoCreateNestedManyWithoutReceiverInput;
+    comments?: Prisma.KudoCommentCreateNestedManyWithoutUserInput;
+    reactions?: Prisma.KudoReactionCreateNestedManyWithoutUserInput;
+    ledgers?: Prisma.PointLedgerCreateNestedManyWithoutUserInput;
+    notificationsReceived?: Prisma.NotificationCreateNestedManyWithoutReceiverInput;
+    notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
+    rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
+    monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutTaggedKudosInput = {
+    id?: string;
+    email: string;
+    password: string;
+    fullName: string;
+    avatarUrl?: string | null;
+    department?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    sentKudos?: Prisma.KudoUncheckedCreateNestedManyWithoutSenderInput;
+    receivedKudos?: Prisma.KudoUncheckedCreateNestedManyWithoutReceiverInput;
+    comments?: Prisma.KudoCommentUncheckedCreateNestedManyWithoutUserInput;
+    reactions?: Prisma.KudoReactionUncheckedCreateNestedManyWithoutUserInput;
+    ledgers?: Prisma.PointLedgerUncheckedCreateNestedManyWithoutUserInput;
+    notificationsReceived?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput;
+    notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
+    rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
+    monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutTaggedKudosInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutTaggedKudosInput, Prisma.UserUncheckedCreateWithoutTaggedKudosInput>;
+};
+export type UserUpsertWithoutTaggedKudosInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutTaggedKudosInput, Prisma.UserUncheckedUpdateWithoutTaggedKudosInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutTaggedKudosInput, Prisma.UserUncheckedCreateWithoutTaggedKudosInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutTaggedKudosInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutTaggedKudosInput, Prisma.UserUncheckedUpdateWithoutTaggedKudosInput>;
+};
+export type UserUpdateWithoutTaggedKudosInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    fullName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    sentKudos?: Prisma.KudoUpdateManyWithoutSenderNestedInput;
+    receivedKudos?: Prisma.KudoUpdateManyWithoutReceiverNestedInput;
+    comments?: Prisma.KudoCommentUpdateManyWithoutUserNestedInput;
+    reactions?: Prisma.KudoReactionUpdateManyWithoutUserNestedInput;
+    ledgers?: Prisma.PointLedgerUpdateManyWithoutUserNestedInput;
+    notificationsReceived?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput;
+    notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
+    rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
+    monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutTaggedKudosInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    fullName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    sentKudos?: Prisma.KudoUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedKudos?: Prisma.KudoUncheckedUpdateManyWithoutReceiverNestedInput;
     comments?: Prisma.KudoCommentUncheckedUpdateManyWithoutUserNestedInput;
     reactions?: Prisma.KudoReactionUncheckedUpdateManyWithoutUserNestedInput;
     ledgers?: Prisma.PointLedgerUncheckedUpdateManyWithoutUserNestedInput;
@@ -647,6 +763,7 @@ export type UserCreateWithoutReactionsInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutReactionsInput = {
     id?: string;
@@ -665,6 +782,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutReactionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -696,6 +814,7 @@ export type UserUpdateWithoutReactionsInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutReactionsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -714,6 +833,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutCommentsInput = {
     id?: string;
@@ -732,6 +852,7 @@ export type UserCreateWithoutCommentsInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutCommentsInput = {
     id?: string;
@@ -750,6 +871,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutCommentsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -781,6 +903,7 @@ export type UserUpdateWithoutCommentsInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutCommentsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -799,6 +922,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutRewardRedemptionsInput = {
     id?: string;
@@ -817,6 +941,7 @@ export type UserCreateWithoutRewardRedemptionsInput = {
     notificationsReceived?: Prisma.NotificationCreateNestedManyWithoutReceiverInput;
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutRewardRedemptionsInput = {
     id?: string;
@@ -835,6 +960,7 @@ export type UserUncheckedCreateWithoutRewardRedemptionsInput = {
     notificationsReceived?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput;
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutRewardRedemptionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -866,6 +992,7 @@ export type UserUpdateWithoutRewardRedemptionsInput = {
     notificationsReceived?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput;
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutRewardRedemptionsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -884,6 +1011,7 @@ export type UserUncheckedUpdateWithoutRewardRedemptionsInput = {
     notificationsReceived?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput;
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutLedgersInput = {
     id?: string;
@@ -902,6 +1030,7 @@ export type UserCreateWithoutLedgersInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutLedgersInput = {
     id?: string;
@@ -920,6 +1049,7 @@ export type UserUncheckedCreateWithoutLedgersInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutLedgersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -951,6 +1081,7 @@ export type UserUpdateWithoutLedgersInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutLedgersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -969,6 +1100,7 @@ export type UserUncheckedUpdateWithoutLedgersInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutNotificationsReceivedInput = {
     id?: string;
@@ -987,6 +1119,7 @@ export type UserCreateWithoutNotificationsReceivedInput = {
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutNotificationsReceivedInput = {
     id?: string;
@@ -1005,6 +1138,7 @@ export type UserUncheckedCreateWithoutNotificationsReceivedInput = {
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutNotificationsReceivedInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1027,6 +1161,7 @@ export type UserCreateWithoutNotificationsSentInput = {
     notificationsReceived?: Prisma.NotificationCreateNestedManyWithoutReceiverInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutNotificationsSentInput = {
     id?: string;
@@ -1045,6 +1180,7 @@ export type UserUncheckedCreateWithoutNotificationsSentInput = {
     notificationsReceived?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutNotificationsSentInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1076,6 +1212,7 @@ export type UserUpdateWithoutNotificationsReceivedInput = {
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutNotificationsReceivedInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1094,6 +1231,7 @@ export type UserUncheckedUpdateWithoutNotificationsReceivedInput = {
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserUpsertWithoutNotificationsSentInput = {
     update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsSentInput, Prisma.UserUncheckedUpdateWithoutNotificationsSentInput>;
@@ -1121,6 +1259,7 @@ export type UserUpdateWithoutNotificationsSentInput = {
     notificationsReceived?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutNotificationsSentInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1139,6 +1278,7 @@ export type UserUncheckedUpdateWithoutNotificationsSentInput = {
     notificationsReceived?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
     monthlyBudgets?: Prisma.MonthlyGivingBudgetUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutMonthlyBudgetsInput = {
     id?: string;
@@ -1157,6 +1297,7 @@ export type UserCreateWithoutMonthlyBudgetsInput = {
     notificationsReceived?: Prisma.NotificationCreateNestedManyWithoutReceiverInput;
     notificationsSent?: Prisma.NotificationCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutMonthlyBudgetsInput = {
     id?: string;
@@ -1175,6 +1316,7 @@ export type UserUncheckedCreateWithoutMonthlyBudgetsInput = {
     notificationsReceived?: Prisma.NotificationUncheckedCreateNestedManyWithoutReceiverInput;
     notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutUserInput;
+    taggedKudos?: Prisma.KudoTagUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutMonthlyBudgetsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1206,6 +1348,7 @@ export type UserUpdateWithoutMonthlyBudgetsInput = {
     notificationsReceived?: Prisma.NotificationUpdateManyWithoutReceiverNestedInput;
     notificationsSent?: Prisma.NotificationUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutMonthlyBudgetsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1224,6 +1367,7 @@ export type UserUncheckedUpdateWithoutMonthlyBudgetsInput = {
     notificationsReceived?: Prisma.NotificationUncheckedUpdateManyWithoutReceiverNestedInput;
     notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput;
     rewardRedemptions?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutUserNestedInput;
+    taggedKudos?: Prisma.KudoTagUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCountOutputType = {
     sentKudos: number;
@@ -1235,6 +1379,7 @@ export type UserCountOutputType = {
     notificationsSent: number;
     rewardRedemptions: number;
     monthlyBudgets: number;
+    taggedKudos: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     sentKudos?: boolean | UserCountOutputTypeCountSentKudosArgs;
@@ -1246,6 +1391,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     notificationsSent?: boolean | UserCountOutputTypeCountNotificationsSentArgs;
     rewardRedemptions?: boolean | UserCountOutputTypeCountRewardRedemptionsArgs;
     monthlyBudgets?: boolean | UserCountOutputTypeCountMonthlyBudgetsArgs;
+    taggedKudos?: boolean | UserCountOutputTypeCountTaggedKudosArgs;
 };
 export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null;
@@ -1277,6 +1423,9 @@ export type UserCountOutputTypeCountRewardRedemptionsArgs<ExtArgs extends runtim
 export type UserCountOutputTypeCountMonthlyBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.MonthlyGivingBudgetWhereInput;
 };
+export type UserCountOutputTypeCountTaggedKudosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.KudoTagWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -1295,6 +1444,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     notificationsSent?: boolean | Prisma.User$notificationsSentArgs<ExtArgs>;
     rewardRedemptions?: boolean | Prisma.User$rewardRedemptionsArgs<ExtArgs>;
     monthlyBudgets?: boolean | Prisma.User$monthlyBudgetsArgs<ExtArgs>;
+    taggedKudos?: boolean | Prisma.User$taggedKudosArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1338,6 +1488,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     notificationsSent?: boolean | Prisma.User$notificationsSentArgs<ExtArgs>;
     rewardRedemptions?: boolean | Prisma.User$rewardRedemptionsArgs<ExtArgs>;
     monthlyBudgets?: boolean | Prisma.User$monthlyBudgetsArgs<ExtArgs>;
+    taggedKudos?: boolean | Prisma.User$taggedKudosArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -1354,6 +1505,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         notificationsSent: Prisma.$NotificationPayload<ExtArgs>[];
         rewardRedemptions: Prisma.$RewardRedemptionPayload<ExtArgs>[];
         monthlyBudgets: Prisma.$MonthlyGivingBudgetPayload<ExtArgs>[];
+        taggedKudos: Prisma.$KudoTagPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -1425,6 +1577,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     notificationsSent<T extends Prisma.User$notificationsSentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsSentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     rewardRedemptions<T extends Prisma.User$rewardRedemptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rewardRedemptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RewardRedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     monthlyBudgets<T extends Prisma.User$monthlyBudgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$monthlyBudgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MonthlyGivingBudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    taggedKudos<T extends Prisma.User$taggedKudosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taggedKudosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KudoTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
@@ -1635,6 +1788,17 @@ export type User$monthlyBudgetsArgs<ExtArgs extends runtime.Types.Extensions.Int
     take?: number;
     skip?: number;
     distinct?: Prisma.MonthlyGivingBudgetScalarFieldEnum | Prisma.MonthlyGivingBudgetScalarFieldEnum[];
+};
+export type User$taggedKudosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.KudoTagSelect<ExtArgs> | null;
+    omit?: Prisma.KudoTagOmit<ExtArgs> | null;
+    include?: Prisma.KudoTagInclude<ExtArgs> | null;
+    where?: Prisma.KudoTagWhereInput;
+    orderBy?: Prisma.KudoTagOrderByWithRelationInput | Prisma.KudoTagOrderByWithRelationInput[];
+    cursor?: Prisma.KudoTagWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.KudoTagScalarFieldEnum | Prisma.KudoTagScalarFieldEnum[];
 };
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserSelect<ExtArgs> | null;

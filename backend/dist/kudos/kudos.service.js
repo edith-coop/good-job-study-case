@@ -19,41 +19,22 @@ let KudosService = class KudosService {
         this.prisma = prisma;
         this.notificationsService = notificationsService;
         this.includeKudo = {
-            sender: {
-                select: {
-                    id: true,
-                    email: true,
-                    fullName: true,
-                    avatarUrl: true,
-                    department: true,
-                },
-            },
-            receiver: {
-                select: {
-                    id: true,
-                    email: true,
-                    fullName: true,
-                    avatarUrl: true,
-                    department: true,
-                },
-            },
+            sender: { select: { id: true, email: true, fullName: true, avatarUrl: true, department: true } },
+            receiver: { select: { id: true, email: true, fullName: true, avatarUrl: true, department: true } },
             media: true,
             comments: {
                 orderBy: { createdAt: 'desc' },
                 include: {
-                    user: {
-                        select: {
-                            id: true,
-                            email: true,
-                            fullName: true,
-                            avatarUrl: true,
-                            department: true,
-                        },
-                    },
+                    user: { select: { id: true, email: true, fullName: true, avatarUrl: true, department: true } },
                     media: true,
                 },
             },
             reactions: true,
+            tags: {
+                include: {
+                    user: { select: { id: true, email: true, fullName: true, avatarUrl: true, department: true } },
+                },
+            },
         };
     }
     getCurrentMonth() {
@@ -64,23 +45,27 @@ let KudosService = class KudosService {
             this.prisma.user.findUnique({ where: { id: senderId } }),
             this.prisma.user.findUnique({ where: { id: receiverId } }),
         ]);
-        if (!sender) {
+        if (!sender)
             throw new common_1.NotFoundException('Sender not found');
-        }
-        if (!receiver) {
+        if (!receiver)
             throw new common_1.NotFoundException('Receiver not found');
-        }
         return { sender, receiver };
+    }
+    validateTaggedUserIds(senderId, taggedUserIds) {
+        if (!taggedUserIds?.length)
+            return;
+        const uniqueTaggedUserIds = new Set(taggedUserIds);
+        if (uniqueTaggedUserIds.size !== taggedUserIds.length) {
+            throw new common_1.BadRequestException('taggedUserIds must not contain duplicates');
+        }
+        if (uniqueTaggedUserIds.has(senderId)) {
+            throw new common_1.BadRequestException('You cannot tag yourself');
+        }
     }
     async ensureMonthlyBudget(tx, senderId, points) {
         const month = this.getCurrentMonth();
         const budget = await tx.monthlyGivingBudget.upsert({
-            where: {
-                userId_month: {
-                    userId: senderId,
-                    month,
-                },
-            },
+            where: { userId_month: { userId: senderId, month } },
             update: {},
             create: {
                 userId: senderId,
@@ -98,30 +83,23 @@ let KudosService = class KudosService {
     async updateMonthlyBudget(tx, budgetId, points) {
         return tx.monthlyGivingBudget.update({
             where: { id: budgetId },
-            data: {
-                usedBudget: { increment: points },
-                remainingBudget: { decrement: points },
-            },
+            data: { usedBudget: { increment: points }, remainingBudget: { decrement: points } },
         });
     }
-    async createKudoRecord(tx, senderId, dto) {
+    async createKudoRecord(tx, senderId, dto, type, visibility, receiverId, points = 0) {
         return tx.kudo.create({
             data: {
+                coreValue: "",
                 senderId,
-                receiverId: dto.receiverId,
-                points: dto.points,
-                coreValue: dto.coreValue,
+                receiverId,
+                type,
+                points,
                 message: dto.message,
-                visibility: dto.visibility ?? client_1.Visibility.PUBLIC,
+                visibility,
                 media: dto.media?.length
-                    ? {
-                        create: dto.media.map((item) => ({
-                            mediaType: item.mediaType,
-                            mediaUrl: item.mediaUrl,
-                            durationSeconds: item.durationSeconds ?? 0,
-                        })),
-                    }
+                    ? { create: dto.media.map((item) => ({ mediaType: item.mediaType, mediaUrl: item.mediaUrl, durationSeconds: item.durationSeconds ?? 0 })) }
                     : undefined,
+                tags: dto.taggedUserIds?.length ? { create: dto.taggedUserIds.map((userId) => ({ userId })) } : undefined,
             },
             include: this.includeKudo,
         });
@@ -129,22 +107,8 @@ let KudosService = class KudosService {
     async createPointLedgers(tx, senderId, receiverId, points, kudoId, senderFullName, receiverFullName) {
         return tx.pointLedger.createMany({
             data: [
-                {
-                    userId: senderId,
-                    type: 'GIVE',
-                    amount: -points,
-                    referenceType: 'KUDO',
-                    referenceId: kudoId,
-                    description: `Give ${points} points to ${receiverFullName}`,
-                },
-                {
-                    userId: receiverId,
-                    type: 'RECEIVE',
-                    amount: points,
-                    referenceType: 'KUDO',
-                    referenceId: kudoId,
-                    description: `Receive ${points} points from ${senderFullName}`,
-                },
+                { userId: senderId, type: 'GIVE', amount: -points, referenceType: 'KUDO', referenceId: kudoId, description: `Give ${points} points to ${receiverFullName}` },
+                { userId: receiverId, type: 'RECEIVE', amount: points, referenceType: 'KUDO', referenceId: kudoId, description: `Receive ${points} points from ${senderFullName}` },
             ],
         });
     }
@@ -157,13 +121,24 @@ let KudosService = class KudosService {
             entityId: kudoId,
         });
     }
+    async notifyTaggedUsers(senderId, taggedUserIds, kudoId) {
+        if (!taggedUserIds?.length)
+            return;
+        const uniqueTaggedUserIds = [...new Set(taggedUserIds.filter((id) => id !== senderId))];
+        await Promise.all(uniqueTaggedUserIds.map((userId) => this.notificationsService.createNotification({
+            receiverId: userId,
+            actorId: senderId,
+            type: 'TAGGED',
+            entityType: 'Kudo',
+            entityId: kudoId,
+        })));
+    }
     async create(senderId, dto) {
-        if (senderId === dto.receiverId) {
+        if (senderId === dto.receiverId)
             throw new common_1.ForbiddenException('You cannot send a kudo to yourself');
-        }
-        if (dto.points < 10 || dto.points > 50) {
+        if (dto.points < 10 || dto.points > 50)
             throw new common_1.BadRequestException('Points must be between 10 and 50');
-        }
+        this.validateTaggedUserIds(senderId, dto.taggedUserIds);
         const { sender, receiver } = await this.loadSenderAndReceiver(senderId, dto.receiverId);
         let createdKudo;
         let updatedBudget;
@@ -171,101 +146,100 @@ let KudosService = class KudosService {
             await this.prisma.$transaction(async (tx) => {
                 const budget = await this.ensureMonthlyBudget(tx, senderId, dto.points);
                 updatedBudget = await this.updateMonthlyBudget(tx, budget.id, dto.points);
-                createdKudo = await this.createKudoRecord(tx, senderId, dto);
+                createdKudo = await this.createKudoRecord(tx, senderId, dto, client_1.KudoType.PEER_RECOGNITION, client_1.Visibility.PRIVATE, dto.receiverId, dto.points);
                 await this.createPointLedgers(tx, senderId, dto.receiverId, dto.points, createdKudo.id, sender.fullName, receiver.fullName);
+            }, {
+                maxWait: 5000,
+                timeout: 15000,
             });
         }
         catch (error) {
-            if (error instanceof common_1.HttpException) {
-                throw error;
-            }
-            throw new common_1.BadRequestException(error || error);
+            if (error instanceof Error)
+                throw new common_1.BadRequestException(error.message);
+            throw new common_1.BadRequestException('Failed to create kudo');
         }
         try {
-            await this.notifyKudoReceiver(senderId, dto.receiverId, createdKudo.id);
+            await Promise.all([
+                this.notifyKudoReceiver(senderId, dto.receiverId, createdKudo.id),
+                this.notifyTaggedUsers(senderId, dto.taggedUserIds, createdKudo.id),
+            ]);
         }
-        catch (notificationError) {
-            console.error('Failed to send notification:', notificationError);
+        catch (error) {
+            console.error('Failed to send notification:', error);
         }
-        return {
-            kudo: createdKudo,
-            budget: updatedBudget,
-        };
+        return { kudo: createdKudo, budget: updatedBudget };
+    }
+    async createFeed(senderId, dto) {
+        this.validateTaggedUserIds(senderId, dto.taggedUserIds);
+        const sender = await this.prisma.user.findUnique({ where: { id: senderId } });
+        if (!sender)
+            throw new common_1.NotFoundException('Sender not found');
+        const kudo = await this.prisma.$transaction(async (tx) => {
+            return this.createKudoRecord(tx, senderId, dto, client_1.KudoType.LIVE_FEED, client_1.Visibility.PUBLIC, senderId, 0);
+        }, {
+            maxWait: 5000,
+            timeout: 15000,
+        });
+        try {
+            await this.notifyTaggedUsers(senderId, dto.taggedUserIds, kudo.id);
+        }
+        catch (error) {
+            console.error('Failed to send notification:', error);
+        }
+        return { kudo };
     }
     async list(query) {
         const page = query.page ?? 1;
         const limit = query.limit ?? 10;
         const skip = (page - 1) * limit;
         const [items, total] = await this.prisma.$transaction([
-            this.prisma.kudo.findMany({
-                skip,
-                take: limit,
-                orderBy: { createdAt: 'desc' },
-                include: this.includeKudo,
-            }),
-            this.prisma.kudo.count(),
+            this.prisma.kudo.findMany({ where: { type: client_1.KudoType.LIVE_FEED }, skip, take: limit, orderBy: { createdAt: 'desc' }, include: this.includeKudo }),
+            this.prisma.kudo.count({ where: { type: client_1.KudoType.LIVE_FEED } }),
         ]);
-        return {
-            items,
-            meta: {
-                page,
-                limit,
-                total,
-                totalPages: Math.ceil(total / limit),
-            },
-        };
+        return { items, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+    }
+    async listSent(senderId, query) {
+        const page = query.page ?? 1;
+        const limit = query.limit ?? 10;
+        const skip = (page - 1) * limit;
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.kudo.findMany({ where: { senderId, type: client_1.KudoType.PEER_RECOGNITION }, skip, take: limit, orderBy: { createdAt: 'desc' }, include: this.includeKudo }),
+            this.prisma.kudo.count({ where: { senderId, type: client_1.KudoType.PEER_RECOGNITION } }),
+        ]);
+        return { items, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+    }
+    async listReceived(receiverId, query) {
+        const page = query.page ?? 1;
+        const limit = query.limit ?? 10;
+        const skip = (page - 1) * limit;
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.kudo.findMany({ where: { receiverId, type: client_1.KudoType.PEER_RECOGNITION }, skip, take: limit, orderBy: { createdAt: 'desc' }, include: this.includeKudo }),
+            this.prisma.kudo.count({ where: { receiverId, type: client_1.KudoType.PEER_RECOGNITION } }),
+        ]);
+        return { items, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } };
     }
     async getById(id) {
-        const kudo = await this.prisma.kudo.findUnique({
-            where: { id },
-            include: this.includeKudo,
-        });
-        if (!kudo) {
+        const kudo = await this.prisma.kudo.findUnique({ where: { id }, include: this.includeKudo });
+        if (!kudo)
             throw new common_1.NotFoundException('Kudo not found');
-        }
         return kudo;
     }
     async addComment(userId, kudoId, dto) {
         try {
             const kudo = await this.prisma.kudo.findUnique({ where: { id: kudoId } });
-            if (!kudo) {
+            if (!kudo)
                 throw new common_1.NotFoundException('Kudo not found');
-            }
             return this.prisma.$transaction(async (tx) => {
                 const comment = await tx.kudoComment.create({
                     data: {
                         kudoId,
                         userId,
                         content: dto.content,
-                        media: dto.media?.length
-                            ? {
-                                create: dto.media.map((item) => ({
-                                    mediaType: item.mediaType,
-                                    mediaUrl: item.mediaUrl,
-                                })),
-                            }
-                            : undefined,
+                        media: dto.media?.length ? { create: dto.media.map((item) => ({ mediaType: item.mediaType, mediaUrl: item.mediaUrl })) } : undefined,
                     },
-                    include: {
-                        user: {
-                            select: {
-                                id: true,
-                                email: true,
-                                fullName: true,
-                                avatarUrl: true,
-                                department: true,
-                            },
-                        },
-                        media: true,
-                    },
+                    include: { user: { select: { id: true, email: true, fullName: true, avatarUrl: true, department: true } }, media: true },
                 });
-                await this.notificationsService.createNotification({
-                    receiverId: kudo.receiverId,
-                    actorId: userId,
-                    type: 'COMMENT',
-                    entityType: 'KudoComment',
-                    entityId: comment.id,
-                });
+                await this.notificationsService.createNotification({ receiverId: kudo.receiverId, actorId: userId, type: 'COMMENT', entityType: 'KudoComment', entityId: comment.id });
                 return comment;
             });
         }
@@ -276,34 +250,14 @@ let KudosService = class KudosService {
     async addReaction(userId, kudoId, dto) {
         try {
             const kudo = await this.prisma.kudo.findUnique({ where: { id: kudoId } });
-            if (!kudo) {
+            if (!kudo)
                 throw new common_1.NotFoundException('Kudo not found');
-            }
-            const existing = await this.prisma.kudoReaction.findFirst({
-                where: {
-                    kudoId,
-                    userId,
-                    emoji: dto.emoji,
-                },
-            });
-            if (existing) {
-                throw new common_1.BadRequestException('Reaction already exists');
-            }
             return this.prisma.$transaction(async (tx) => {
-                const reaction = await tx.kudoReaction.create({
-                    data: {
-                        kudoId,
-                        userId,
-                        emoji: dto.emoji,
-                    },
-                });
-                await this.notificationsService.createNotification({
-                    receiverId: kudo.receiverId,
-                    actorId: userId,
-                    type: 'REACTION',
-                    entityType: 'KudoReaction',
-                    entityId: reaction.id,
-                });
+                const existingReaction = await tx.kudoReaction.findFirst({ where: { kudoId, userId } });
+                const reaction = existingReaction
+                    ? await tx.kudoReaction.update({ where: { id: existingReaction.id }, data: { emoji: dto.emoji } })
+                    : await tx.kudoReaction.create({ data: { kudoId, userId, emoji: dto.emoji } });
+                await this.notificationsService.createNotification({ receiverId: kudo.receiverId, actorId: userId, type: 'REACTION', entityType: 'KudoReaction', entityId: reaction.id });
                 return reaction;
             });
         }
