@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { memoryStorage } from 'multer';
@@ -43,8 +43,12 @@ export class UploadsController {
     }),
   )
   async upload(@UploadedFile() file: Express.Multer.File) {
-    const result = await this.uploadsService.uploadFile(file);
-
-    return result;
+    try {
+      const result = await this.uploadsService.uploadBuffer(file.buffer,file.originalname);
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+   
   }
 }

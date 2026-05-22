@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
 
 @Injectable()
 export class UploadsService {
@@ -11,39 +12,32 @@ export class UploadsService {
     });
   }
 
-  async uploadFile(file: Express.Multer.File) {
-    return new Promise<{
-      url: string;
-      publicId: string;
-      resourceType: string;
-      originalName: string;
-      mimeType: string;
-      size: number;
-    }>((resolve, reject) => {
-      const resourceType = file.mimetype.startsWith('video/') ? 'video' : 'image';
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'amanotes/uploads',
-          resource_type: resourceType,
-        },
-        (error, result) => {
-          if (error || !result) {
-            reject(error ?? new Error('Upload failed'));
-            return;
-          }
+  async uploadBuffer(
+    buffer: Buffer,
+    filename: string,
+    folder = 'amanotes',
+): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder,
+                public_id: filename.split('.')[0],
+                resource_type: 'auto',
+                format: 'png',
+            },
+            (error, result: any) => {
+                if (error) {
+                    console.error('Cloudinary upload error:', error);
+                    return reject(error);
+                }
+                resolve(result.secure_url);
+            },
+        );
 
-          resolve({
-            url: result.secure_url,
-            publicId: result.public_id,
-            resourceType: result.resource_type ?? resourceType,
-            originalName: file.originalname,
-            mimeType: file.mimetype,
-            size: file.size,
-          });
-        },
-      );
-
-      stream.end(file.buffer);
+        const readable = new Readable();
+        readable.push(buffer);
+        readable.push(null); // Signals end of stream
+        readable.pipe(stream);
     });
-  }
+}
 }

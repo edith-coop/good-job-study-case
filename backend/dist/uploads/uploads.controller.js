@@ -23,8 +23,13 @@ let UploadsController = class UploadsController {
         this.uploadsService = uploadsService;
     }
     async upload(file) {
-        const result = await this.uploadsService.uploadFile(file);
-        return result;
+        try {
+            const result = await this.uploadsService.uploadBuffer(file.buffer, file.originalname);
+            return result;
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error);
+        }
     }
 };
 exports.UploadsController = UploadsController;

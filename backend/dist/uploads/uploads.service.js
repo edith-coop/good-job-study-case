@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadsService = void 0;
 const common_1 = require("@nestjs/common");
 const cloudinary_1 = require("cloudinary");
+const stream_1 = require("stream");
 let UploadsService = class UploadsService {
     constructor() {
         cloudinary_1.v2.config({
@@ -20,27 +21,24 @@ let UploadsService = class UploadsService {
             api_secret: process.env.CLOUDINARY_API_SECRET,
         });
     }
-    async uploadFile(file) {
+    async uploadBuffer(buffer, filename, folder = 'amanotes') {
         return new Promise((resolve, reject) => {
-            const resourceType = file.mimetype.startsWith('video/') ? 'video' : 'image';
             const stream = cloudinary_1.v2.uploader.upload_stream({
-                folder: 'amanotes/uploads',
-                resource_type: resourceType,
+                folder,
+                public_id: filename.split('.')[0],
+                resource_type: 'auto',
+                format: 'png',
             }, (error, result) => {
-                if (error || !result) {
-                    reject(error ?? new Error('Upload failed'));
-                    return;
+                if (error) {
+                    console.error('Cloudinary upload error:', error);
+                    return reject(error);
                 }
-                resolve({
-                    url: result.secure_url,
-                    publicId: result.public_id,
-                    resourceType: result.resource_type ?? resourceType,
-                    originalName: file.originalname,
-                    mimeType: file.mimetype,
-                    size: file.size,
-                });
+                resolve(result.secure_url);
             });
-            stream.end(file.buffer);
+            const readable = new stream_1.Readable();
+            readable.push(buffer);
+            readable.push(null);
+            readable.pipe(stream);
         });
     }
 };
